@@ -1,6 +1,29 @@
 body {
     background-color: pink; 
+    margin-left: 20px;
+    margin-right: 20px;
 
+}
+
+header {
+    background-color: hotpink;
+    color: aliceblue; 
+    padding: 5px;
+    font-size: 16pt;
+
+}
+
+footer {
+    background-color: hotpink;
+    color: aliceblue; 
+    padding: 5px;
+    font-size: 11pt;
+    font-style: italic;
+    text-align: right;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    position: fixed;
 }
 
 h1{
@@ -14,3 +37,7 @@ img {
     margin: 20px;
 }
 
+div, li {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: large;
+}
