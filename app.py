@@ -8,8 +8,9 @@ def start():
 
 @app.route("/menu")
 def menu():
-        return """
+        return '''
 <!doctype html>
+<link rel="stylesheet" href="''' +  url_for('static', filename='menu.css') + '''">
 <html>
     <head>
         <title>НГТУ, ФБ, Лабораторные работы</title>
@@ -32,7 +33,7 @@ def menu():
         </footer>
     </body>
 </html>
-"""
+'''
 
 @app.route("/lab1")
 def lab1():
