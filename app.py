@@ -184,5 +184,5 @@ def cats():
 
 @app.route("/lab2/example")
 def example():
-    return render_template('example.html')
-    
+    name = 'Мальцева Дарья Алексеевна'
+    return render_template('example.html', name=name)
