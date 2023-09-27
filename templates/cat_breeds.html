@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if name %} 
+                {{name}}. 
+            {% else %}
+                Анонимус.
+            {% endif %} 
+            Лабораторная работа {{number_lab}}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
+</head>
+<body>
+    <header>
+        WEB-программирование, часть 2. {% if number_lab %}Лабораторная работа {{number_lab}}{% endif %}
+    </header>
+
+    <main> 
+        <h1 style="text-align: center;"> Породы кошек </h1>
+        <div style="font-size: 30px; text-align: left;">Мейн-кун</div>
+        <img src = "/static/cat1.jpg" style="width: 400px; ">
+        <div style="position: absolute; left: 450px; top: 200px; width: 500px;">
+            Одной из самых удивительных и загадочных пород 
+            считается мейн-кун – ласковый гигант с серьезным взглядом. 
+            Этих созданий называют «комнатными рысями», что неудивительно, 
+            т.к. они одни из самых крупных домашних кошек.</div>
+
+        <div style="font-size: 30px; text-align: left;">Шотландская вислоухая</div>
+        <img src = "/static/cat2.jpg" style="width: 400px; ">
+        <div style="position: absolute; left: 450px; top: 550px; width: 500px;">
+            Во всём мире эту породу именуют «скоттиш-фолд», 
+            но нам привычней называть этих милых кошек «шотландскими вислоухими». 
+            Их «няшная» внешность никого не оставит равнодушным – такое создание сразу 
+            хочется взять на руки и затискать.
+        </div>
+        
+        <div style="font-size: 30px; text-align: left;">Британские короткошерстные</div>
+        <img src = "/static/cat3.jpg" style="width: 400px; ">
+        <div style="position: absolute; left: 450px; top: 900px; width: 500px;">Без таких вот 
+            «плюшевых» комочков счастья не мыслят своего существования миллионы людей во всем 
+            мире. Эти аристократичные, дружелюбные, харизматичные и весьма чистоплотные питомцы 
+            уже долгое время являются одной из самых популярных кошачьих пород на планете.
+        </div>
+
+        <div style="font-size: 30px; text-align: left;">Бенгальская кошка</div>
+        <img src = "/static/cat4.jpg" style="width: 400px; ">
+        <div style="position: absolute; left: 450px; top: 1250px; width: 500px;">Бенгальские 
+            кошки – невероятно красивые животные, которые сочетают в себе эффектную внешность 
+            диких хищников и покладистый характер домашних питомцев. Ну а главной «фишкой» этих 
+            созданий является «леопардовый окрас», за что их и зовут «домашними леопардами»
+        </div>
+
+        <div style="font-size: 30px; text-align: left;">Сиамская кошка</div>
+        <img src = "/static/cat5.jpg" style="width: 400px; ">
+        <div style="position: absolute; left: 450px; top: 1550px; width: 500px;">Сиамы – 
+            грациозные восточные красавцы и красавицы (сумевшие сохранить свои корни 
+            практически в первозданном виде) выделяются особым изяществом, темпераментным 
+            характером и некой миниатюрностью.
+        </div>
+    </main>
+
+    <footer>
+        &copy;
+        {% if name %} 
+            {{name}}, 
+        {% else %}
+            Анонимус,
+        {% endif %}
+
+        {% if group %} 
+            {{group}}, 
+        {% else %}
+            нет группы,
+        {% endif %}
+
+        {% if number_course %} 
+            {{number_course}} 
+        {% else %}
+            0
+        {% endif %} курс, 
+        2023
+    </footer>
+    
+</body>
+</html>

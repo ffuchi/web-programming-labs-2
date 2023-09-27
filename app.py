@@ -214,3 +214,13 @@ def example():
 @app.route("/lab2/")
 def lab2():
     return render_template('lab2.html')
+
+@app.route("/lab2/cat_breeds")
+def cat_breeds():
+    name = 'Мальцева Дарья Алексеевна'
+    number_lab = '2'
+    group = 'ФБИ-13'
+    number_course = '3'
+
+    return render_template('cat_breeds.html', name=name, number_lab=number_lab, 
+            group=group, number_course=number_course)
