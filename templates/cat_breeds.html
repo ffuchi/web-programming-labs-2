@@ -1,22 +1,8 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if name %} 
-                {{name}}. 
-            {% else %}
-                Анонимус.
-            {% endif %} 
-            Лабораторная работа {{number_lab}}</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
-</head>
-<body>
-    <header>
-        WEB-программирование, часть 2. {% if number_lab %}Лабораторная работа {{number_lab}}{% endif %}
-    </header>
+{% extends "base.html" %}
+{% block lab %}Лабораторная работа 2{% endblock %}
 
-    <main> 
+{% block main %}
+
         <h1 style="text-align: center;"> Породы кошек </h1>
         <div style="font-size: 30px; text-align: left;">Мейн-кун</div>
         <img src = "/static/cat1.jpg" style="width: 400px; ">
@@ -58,29 +44,4 @@
             практически в первозданном виде) выделяются особым изяществом, темпераментным 
             характером и некой миниатюрностью.
         </div>
-    </main>
-
-    <footer>
-        &copy;
-        {% if name %} 
-            {{name}}, 
-        {% else %}
-            Анонимус,
-        {% endif %}
-
-        {% if group %} 
-            {{group}}, 
-        {% else %}
-            нет группы,
-        {% endif %}
-
-        {% if number_course %} 
-            {{number_course}} 
-        {% else %}
-            0
-        {% endif %} курс, 
-        2023
-    </footer>
-    
-</body>
-</html>
+        {% endblock %}
