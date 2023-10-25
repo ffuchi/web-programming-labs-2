@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+        <h1>Куплен билет:</h1>
+
+    <div>Фамилия: {{user1}}</div>
+    <div>Имя: {{user2}}</div>
+    <div>Отчество: {{user3}}</div>
+    <div>Тип билета: {{ 'Детский' if type=='childlike' else 'Взрослый' }}</div>
+    <div>Полка: {{ 'Верхняя'if shelf == 'upper' else 'Нижняя'  'Верхняя боковая' if shelf=='upper side' else 'Нижняя боковая' }}</div>
+
+    <div>
+        <a href="/lab3/ticketPay">Заполнить заново</a>
+    </div>
+    
+
+{% endblock %}

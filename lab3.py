@@ -48,3 +48,38 @@ def pay():
 @lab3.route('/lab3/success')
 def success():
         return render_template('thx.html')
+
+
+@lab3.route("/lab3/ticketPay")
+def ticketPay():
+    user1 = request.args.get('user1')
+    user2 = request.args.get('user2')
+    user3 = request.args.get('user3')
+    typeTicket = request.args.get('typeTicket')
+    typeShelf = request.args.get('typeShelf')
+    luggage = request.args.get('luggage')
+    age = request.args.get('age')
+    departurePoint = request.args.get('departurePoint')
+    destination = request.args.get('destination')
+    date = request.args.get('date')
+
+    return render_template('ticketPay.html', user1=user1, user2=user2, user3=user3,
+                            typeTicket=typeTicket, typeShelf=typeShelf, luggage=luggage,
+                            age=age, departurePoint=departurePoint, destination=destination,
+                            date=date)
+
+@lab3.route('/lab3/ticket')
+def ticket():
+    user1 = request.args.get('user1')
+    user2 = request.args.get('user2')
+    user3 = request.args.get('user3')
+    typeTicket = request.args.get('typeTicket')
+    typeShelf = request.args.get('typeShelf')
+    luggage = request.args.get('luggage')
+    age = request.args.get('age')
+    departurePoint = request.args.get('departurePoint')
+    destination = request.args.get('destination')
+    date = request.args.get('date')
+        return render_template('ticket.html', user1=user, user2=user2, user3=user3,
+        typeTicket=typeTicket, typeShelf=typeShelf, luggage=luggage,
+        age=age, departurePoint=departurePoint, destination=destination, date=date)
