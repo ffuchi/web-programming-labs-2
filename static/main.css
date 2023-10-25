@@ -27,3 +27,7 @@ footer {
     left: 0;
     position: fixed;
 }
+
+.error {
+    color: red;
+}
