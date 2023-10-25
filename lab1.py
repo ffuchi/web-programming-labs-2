@@ -27,6 +27,7 @@ def menu():
             <ol>
                 <li><a href="http://127.0.0.1:5000/lab1" target="_blank">Лабораторная работа 1</a></li>
                 <li><a href="http://127.0.0.1:5000/lab2/" target="_blank">Лабораторная работа 2</a></li>
+                <li><a href="http://127.0.0.1:5000/lab3/" target="_blank">Лабораторная работа 3</a></li>
             </ol>
         </main>
     
