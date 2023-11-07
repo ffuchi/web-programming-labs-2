@@ -4,7 +4,7 @@
 
 {% block main %}
 
-    <h1>Покупка железнодорожного билета</h1>
+    <h1 style="text-shadow: rgb(255, 0, 119) 1px 0 10px; ">Покупка железнодорожного билета</h1>
 
     <form action="/lab3/ticket">
         <label>Фамилия:</label>
@@ -23,29 +23,37 @@
         <label>Тип билета:</label>
         <div>
             <select name="typeTicket">
-                <option value="childlike" {{sex == 'childlike' and 'selected'}}>детский</option>
-                <option value="adult" {{sex == 'adult' and 'selected'}}>взрослый</option>
+                <option value="childlike" {{typeTicket == 'childlike' and 'selected'}}>детский</option>
+                <option value="adult" {{typeTicket == 'adult' and 'selected'}}>взрослый</option>
             </select>
         </div>
 
         <label>Полка:</label>
         <div>
             <select name="typeShelf">
-                <option value="lower" {{sex == 'lower' and 'selected'}}>нижняя</option>
-                <option value="upper" {{sex == 'upper' and 'selected'}}>верхняя</option>
-                <option value="upperSide" {{sex == 'upperSide' and 'selected'}}>верхняя боковая</option>
-                <option value="lowerSide" {{sex == 'lowerSide' and 'selected'}}>нижняя боковая</option>
+                <option value="lower" {{typeShelf == 'lower' and 'selected'}}>нижняя</option>
+                <option value="upper" {{typeShelf == 'upper' and 'selected'}}>верхняя</option>
+                <option value="upperSide" {{typeShelf == 'upperSide' and 'selected'}}>верхняя боковая</option>
+                <option value="lowerSide" {{typeShelf == 'lowerSide' and 'selected'}}>нижняя боковая</option>
             </select>
         </div>
 
         <label>С багажом?</label>
         <div>
             <select name="luggage">
-                <option value="no" {{sex == 'no' and 'selected'}}>нет</option>
-                <option value="yes" {{sex == 'yes' and 'selected'}}>да</option>
+                <option value="no" {{luggage == 'no' and 'selected'}}>нет</option>
+                <option value="yes" {{luggage == 'yes' and 'selected'}}>да</option>
             </select>
         </div>
-
+<!-- 
+        <div>С багажом?</div>
+        <label>
+            <input type="checkbox" name="yes" cheked>да 
+        </label>
+        <label>
+            <input type="checkbox" name="no" cheked>нет 
+        </label>
+        <br> -->
         <label>Ваш возраст:</label>
         <div>
             <input type="number" name="age" min="18" max="120" value="{{age or ''}}" required>

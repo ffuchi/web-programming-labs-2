@@ -3,15 +3,19 @@
 {% block lab %}Лабораторная работа 3{% endblock %}
 
 {% block main %}
-        <h1>Куплен билет:</h1>
-
-    <div>Фамилия: {{user1}}</div>
-    <div>Имя: {{user2}}</div>
-    <div>Отчество: {{user3}}</div>
-    <div>Тип билета: {{ 'Детский' if type=='childlike' else 'Взрослый' }}</div>
-    <div>Полка: {{ 'Верхняя'if shelf == 'upper' else 'Нижняя'  'Верхняя боковая' if shelf=='upper side' else 'Нижняя боковая' }}</div>
-
-    <div>
+    <h1 style="text-shadow: rgb(255, 0, 119) 1px 0 10px; ">Куплен билет:</h1>
+    
+    <div class="ticket"><b>Фамилия: </b>{{user1}}</div>
+    <div class="ticket"><b>Имя:</b> {{user2}}</div>
+    <div class="ticket"><b>Отчество: </b>{{user3}}</div>
+    <div class="ticket"><b>Тип билета:</b> {{ 'Детский' if typeTicket=='childlike' else 'Взрослый' }}</div>
+    <div class="ticket"><b>Полка:</b> {{ 'Верхняя'if typeShelf == 'upper' else 'Нижняя'  'Верхняя боковая' if typeShelf=='upper side' else 'Нижняя боковая' }}</div>
+    <div class="ticket"><b>Наличие багажа:</b> {{'Да' if luggage=='yes' else 'Нет' }}</div>
+    <div class="ticket"><b>Ваш возраст:</b> {{ age }}</div>
+    <div class="ticket"><b>Пункт выезда:</b> {{ departurePoint }} </div>
+    <div class="ticket"><b>Ваш назначения:</b> {{ destination }} </div>
+    <div class="ticket"><b>Дата:</b> {{ date }}</div>
+    <div class="ticket">
         <a href="/lab3/ticketPay">Заполнить заново</a>
     </div>
     

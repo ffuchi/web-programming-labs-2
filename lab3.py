@@ -52,15 +52,28 @@ def success():
 
 @lab3.route("/lab3/ticketPay")
 def ticketPay():
+    errors = {}
     user1 = request.args.get('user1')
+    if user1 == '':
+        errors['user1'] = 'Заполните поле!'
     user2 = request.args.get('user2')
+    if user2 == '':
+        errors['user2'] = 'Заполните поле!'
     user3 = request.args.get('user3')
+    if user3 == '':
+        errors['user3'] = 'Заполните поле!'
     typeTicket = request.args.get('typeTicket')
     typeShelf = request.args.get('typeShelf')
     luggage = request.args.get('luggage')
     age = request.args.get('age')
+    if age == '':
+        errors['age'] = 'Заполните поле!'
     departurePoint = request.args.get('departurePoint')
+    if departurePoint == '':
+        errors['departurePoint'] = 'Заполните поле!'
     destination = request.args.get('destination')
+    if destination == '':
+        errors['destination'] = 'Заполните поле!'
     date = request.args.get('date')
 
     return render_template('ticketPay.html', user1=user1, user2=user2, user3=user3,
@@ -70,16 +83,4 @@ def ticketPay():
 
 @lab3.route('/lab3/ticket')
 def ticket():
-    user1 = request.args.get('user1')
-    user2 = request.args.get('user2')
-    user3 = request.args.get('user3')
-    typeTicket = request.args.get('typeTicket')
-    typeShelf = request.args.get('typeShelf')
-    luggage = request.args.get('luggage')
-    age = request.args.get('age')
-    departurePoint = request.args.get('departurePoint')
-    destination = request.args.get('destination')
-    date = request.args.get('date')
-        return render_template('ticket.html', user1=user, user2=user2, user3=user3,
-        typeTicket=typeTicket, typeShelf=typeShelf, luggage=luggage,
-        age=age, departurePoint=departurePoint, destination=destination, date=date)
+    return render_template('ticket.html')
