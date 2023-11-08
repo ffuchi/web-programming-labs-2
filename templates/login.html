@@ -5,13 +5,13 @@
 {% block main %}
     <h1>Вход</h1>
     <h2>Пожалуйста, авторизуйтесь</h2>
-    <div>{{error}}</div>
+    <div style="font-weight: bold; color: red; ">{{error}}</div>
     <form method="post">
-        <div>
+        <div style="padding-bottom: 5px;">
             <label for="username">Пользователь:</label>
             <input type="text" id="username" name="username" value="{{ username }}">
         </div>
-        <div>
+        <div style="padding-bottom: 5px;">
             <label for="password">Пароль:</label>
             <input type="password" id="password" name="password" value="{{ password }}">
         </div>
