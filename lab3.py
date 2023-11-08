@@ -79,8 +79,21 @@ def ticketPay():
     return render_template('ticketPay.html', user1=user1, user2=user2, user3=user3,
                             typeTicket=typeTicket, typeShelf=typeShelf, luggage=luggage,
                             age=age, departurePoint=departurePoint, destination=destination,
-                            date=date)
+                            date=date, errors=errors)
 
 @lab3.route('/lab3/ticket')
 def ticket():
-    return render_template('ticket.html')
+    user1 = request.args.get('user1')
+    user2 = request.args.get('user2')
+    user3 = request.args.get('user3')
+    typeTicket = request.args.get('typeTicket')
+    typeShelf = request.args.get('typeShelf')
+    luggage = request.args.get('luggage')
+    age = request.args.get('age')
+    departurePoint = request.args.get('departurePoint')
+    destination = request.args.get('destination')
+    date = request.args.get('date')
+    return render_template('ticket.html', user1=user1, user2=user2, user3=user3,
+                            typeTicket=typeTicket, typeShelf=typeShelf, luggage=luggage,
+                            age=age, departurePoint=departurePoint, destination=destination,
+                            date=date)
