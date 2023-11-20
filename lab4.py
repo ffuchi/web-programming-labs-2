@@ -44,12 +44,15 @@ def fridge():
     elif (int(temp) > -1):
         error = 'не удалось установить температуру — слишком высокое значение'
         return render_template('fridge.html', error=error, temp=temp)
+    # else:
+    #     return render_template('temp.html', error=error, temp=temp)
+
     elif (int(temp) >= -12 and int(temp) <= -9):
         error = f'Установлена температура: {temp}°С ❄️❄️❄️'
-        return render_template('fridge.html', error=error, temp=temp)
+        return render_template('temp.html', error=error, temp=temp)
     elif (int(temp) >= -8 and int(temp) <= -5):
         error = f'Установлена температура: {temp}°С ❄️❄️'
-        return render_template('fridge.html', error=error, temp=temp)    
+        return render_template('temp.html', error=error, temp=temp)    
     elif (int(temp) >= -4 and int(temp) <= -1):
         error = f'Установлена температура: {temp}°С ❄️'
-        return render_template('fridge.html', error=error, temp=temp)    
+        return render_template('temp.html', error=error, temp=temp)    

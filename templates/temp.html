@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block lab %} Лабораторная работа 4 {% endblock %}
+
+{% block main %}
+    <h1 style="padding-left: 70px; font-family: cursive;">Холодильник</h1>
+    <img src = "/static/fridge.jpg" style="width: 350px; 
+                        position: absolute; z-index: -1; top: 60px;">
+    
+    <div style="font-size: 20px; font-family: cursive; 
+                margin-top: 470px;">
+        <b>{{error}}</b>
+    </div>
+
+    <div style="margin-top: 50px;" >
+        <a href="/lab4/fridge">Холодильник</a>
+    </div>
+ {% endblock %}
