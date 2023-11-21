@@ -10,6 +10,8 @@
     <style>
         body {
             color: {{ request.cookies.get('color') }};
+            background-color: {{ request.cookies.get('background') }};
+            font-size: {{ request.cookies.get('number') }}px;
         }
     </style>
     {% endif %}

@@ -101,12 +101,24 @@ def cookies():
         return render_template('cookies.html')
     
     color = request.form.get('color')
-    if color is not None:
-        headers = {
-            'Set-Cookie': 'color=' + color + '; path=/',
-            'Location': '/lab4/cookies'
-        }
-        return '', 303, headers
-    else:
-        # Handle the case when no color is selected
-        return 'Please select a color.', 400
+    background = request.form.get('background')
+    number = request.form.get('number')
+    
+    if color == background:
+        error='Цвет текста не должен совпадать с цветом фона'
+        return render_template('cookies.html', error=error, number=number)
+    if not number:
+        error='Введите размер текста'
+        return render_template('cookies.html', error=error, number=number)
+    elif int(number) < 5 or int(number) > 30:
+        error='Размер текста должен быть от 5px до 30px'
+        return render_template('cookies.html', error=error, number=number)
+    
+
+    headers = {
+        'Set-Cookie': ['color=' + color +'; path=/',
+                        'background=' + background +'; path=/',
+                        'number=' + number +'; path=/', ],
+        'Location': '/lab4/cookies'
+    }
+    return '', 303, headers
