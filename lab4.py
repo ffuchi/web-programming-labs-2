@@ -95,4 +95,18 @@ def seed():
             return render_template('receipt.html', price=price, error=error, weight=weight)
       
 
+@lab4.route("/lab4/cookies", methods = ['GET', 'POST'])
+def cookies():
+    if request.method == 'GET':
+        return render_template('cookies.html')
     
+    color = request.form.get('color')
+    if color is not None:
+        headers = {
+            'Set-Cookie': 'color=' + color + '; path=/',
+            'Location': '/lab4/cookies'
+        }
+        return '', 303, headers
+    else:
+        # Handle the case when no color is selected
+        return 'Please select a color.', 400
