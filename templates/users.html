@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block lab %} Лабораторная работа 5 {% endblock %}
+
+{% block main %}
+    <h1>Users</h1>
+    <ul>
+        {% for u in result %}
+        <li>{{ u[1] }}</li>
+        {% endfor %}
+    </ul>
+    <div> {{ result }}</div>
+
+{% endblock %}
