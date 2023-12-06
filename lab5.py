@@ -3,47 +3,54 @@ import psycopg2
 
 lab5 = Blueprint("lab5", __name__)
 
-
-@lab5.route("/lab5")
-def main():
+def dbConnect():
     conn = psycopg2.connect(
         host="127.0.0.1",
         database="knowledge_base_da",
         user="da_knowledge_base", 
         password="123")
+    return conn
 
-    cur = conn.cursor()
+def dbClose(cursor, connection):
+    cursor.close()
+    connection.close()
 
-    cur.execute("SELECT * FROM users;")
 
-    result = cur.fetchall()
 
-    cur.close()
-    conn.close()
+@lab5.route("/lab5")
+def main():
+    visibleUser = "Anon"
 
-    print(result)
+    return render_template("lab5.html", username = visibleUser)
 
-    return "go to console"
+    # conn = dbConnect()
+    # cur = conn.cursor()
+
+    # cur.execute("SELECT * FROM users;")
+
+    # result = cur.fetchall()
+
+    # print(result)
+
+    # dbClose(cur, conn)
+
+    # return "go to console"
 
 
 @lab5.route("/lab5/users")
 def users():
-    conn = psycopg2.connect(
-        host="127.0.0.1",
-        database="knowledge_base_da",
-        user="da_knowledge_base",
-        password="123"
-    )
-
+    conn = dbConnect()
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM users;")
 
     result = cur.fetchall()
 
-    cur.close()
-    conn.close()
-
     print(result)
 
+    dbClose(cur, conn)
+
     return render_template("users.html", result=result)
+
+
+
