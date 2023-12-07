@@ -89,7 +89,7 @@ def registerPage():
 
     # WARNING: мы используем f-строки, что не рекомендуется делать 
     # позже мы разберемся с Вами почему не стоит так делать
-    cur.execute(f"SELECT username FROM users WHERE username = '%s';", (username))
+    cur.execute(f"SELECT username FROM users WHERE username = %s;", (username))
 
     # fetchone, a отличие, от fetchall, получает только одну строку 
     # мы задали свойство UNIQUE для пользователя, значит
@@ -102,7 +102,7 @@ def registerPage():
 
     # Если мы попали сюда, то значит в cur.fetchone нет ни одной строки
     # значит пользователя с таким же логином не существует
-    cur.execute(f"INSERT INTO users (username, password) VALUES ('%s','%s');", (username, hashPassword)) 
+    cur.execute(f"INSERT INTO users (username, password) VALUES (%s,%s);", (username, hashPassword)) 
     # сохраняем пароль в виде хэша в БД
     
     
@@ -133,7 +133,7 @@ def loginPage():
     conn = dbConnect()
     cur = conn.cursor()
 
-    cur.execute(f"SELECT id, password FROM users WHERE username = '%s'", (username))
+    cur.execute("SELECT id, password FROM users WHERE username = %s;", (username,))
 
     result = cur.fetchone()
 
@@ -189,7 +189,7 @@ def createArticle():
             conn = dbConnect()
             cur = conn.cursor()
 
-            cur.execute(f"INSERT INTO articles(user_id, title, articl_text) VALUES ('%s', '%s', '%s') RETURNING id", (userID, title, text_article))
+            cur.execute(f"INSERT INTO articles(user_id, title, articl_text) VALUES (%s, %s, %s) RETURNING id;", (userID, title, text_article))
             # получаем id от вновь созданной записи.
             # в нашем случае мы будем получать статьи след образом
             # /lab5/article/id_article
@@ -218,15 +218,14 @@ def createArticle():
 @lab5.route("/lab5/articles/<int:article_id>")
 def getArticle(article_id):
     userID = session.get("id")
-    visibleUser = "Anon"
-    visibleUser = session.get("username")
+    username = "Anon"
 
     # проверяем авторизован ли пользователь
     if userID is not None:
         conn = dbConnect()
         cur = conn.cursor()
 
-        cur.execute(f"SELECT title, articl_text FROM articles WHERE id = %s and user_id = %s", (article_id, userID))
+        cur.execute(f"SELECT title, articl_text FROM articles WHERE id = %s and user_id = %s;", (article_id, userID))
 
         # возьми одну строку
         articleBody = cur.fetchone()
@@ -240,5 +239,33 @@ def getArticle(article_id):
         # с помощью цикла for в jinja разбить статью на параграфы
         text = articleBody[1].splitlines()
 
-        return render_template("articleN.html", article_text=text, visibleUser = visibleUser, 
+        return render_template("articleN.html", article_text=text, 
 article_title=articleBody[0], username=session.get("username"))
+
+
+@lab5.route("/lab5/view_article")
+def view_article():
+    userID = session.get("id")
+    username = "Anon"
+    
+    # проверяем авторизован ли пользователь
+    if userID is not None:
+        conn = dbConnect()
+        cur = conn.cursor()
+
+        cur.execute("SELECT id, title FROM articles WHERE user_id = %s;", (userID,))
+
+        # возьми одну строку
+        articleList = cur.fetchall()
+
+        if articleList is None:
+            return "Not found!"
+
+        articles = [{'id': row[0], 'title': row[1]} for row in articleList]
+
+        dbClose(cur, conn)
+
+        return render_template("view_article.html", articles=articles, username=session.get("username"))
+
+    # Пользователь не авторизован
+    return redirect("/lab5/login")
