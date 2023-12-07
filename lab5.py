@@ -57,10 +57,11 @@ def users():
 @lab5.route('/lab5/register', methods=["GET", "POST"])
 def registerPage():
     errors = []
-
+    visibleUser = "Anon"
+    visibleUser = session.get("username")
     # Если это метод GET, то верни шаблон и заверши выполнение 
     if request.method == "GET": 
-        return render_template("register.html", errors=errors)
+        return render_template("register.html", errors=errors, username = visibleUser)
 
     # Если мы попали сюда, значит это метод РОЅT,
     # так как GЕT мы уже обработали и сделали return.
@@ -74,7 +75,7 @@ def registerPage():
     if not (username or password): 
         errors.append("Пожалуйста, заполните все поля") 
         print(errors) 
-        return render_template("register.html", errors=errors)
+        return render_template("register.html", errors=errors, username = visibleUser)
     
     # получаем пароль от пользователя, хэшируем его
     hashPassword = generate_password_hash(password)
@@ -88,7 +89,7 @@ def registerPage():
 
     # WARNING: мы используем f-строки, что не рекомендуется делать 
     # позже мы разберемся с Вами почему не стоит так делать
-    cur.execute(f"SELECT username FROM users WHERE username = '{username}';")
+    cur.execute(f"SELECT username FROM users WHERE username = '%s';", (username))
 
     # fetchone, a отличие, от fetchall, получает только одну строку 
     # мы задали свойство UNIQUE для пользователя, значит
@@ -97,11 +98,11 @@ def registerPage():
     if cur.fetchone() is not None:
         errors.append("Пользователь с данным именем уже существует")
         dbClose(cur, conn) 
-        return render_template("register.html", errors=errors)
+        return render_template("register.html", errors=errors, username = visibleUser)
 
     # Если мы попали сюда, то значит в cur.fetchone нет ни одной строки
     # значит пользователя с таким же логином не существует
-    cur.execute(f"INSERT INTO users (username, password) VALUES ('{username}','{hashPassword}');") 
+    cur.execute(f"INSERT INTO users (username, password) VALUES ('%s','%s');", (username, hashPassword)) 
     # сохраняем пароль в виде хэша в БД
     
     
@@ -116,28 +117,30 @@ def registerPage():
 @lab5.route('/lab5/login', methods=["GET", "POST"])
 def loginPage():
     errors = []
+    visibleUser = "Anon"
+    visibleUser = session.get("username")
 
     if request.method == "GET":
-        return render_template("login.html", errors=errors)
+        return render_template("login.html", errors=errors, username = visibleUser)
 
     username = request.form.get("username")
     password = request.form.get("password")
 
     if not (username or password):
         errors.append("Пожалуйста заполните все поля")
-        return render_template("login.html", errors=errors)
+        return render_template("login.html", errors=errors, username = visibleUser)
 
     conn = dbConnect()
     cur = conn.cursor()
 
-    cur.execute(f"SELECT id, password FROM users WHERE username = '{username}'")
+    cur.execute(f"SELECT id, password FROM users WHERE username = '%s'", (username))
 
     result = cur.fetchone()
 
     if result is None:
         errors.append("Неправильный логин или пароль")
         dbClose(cur, conn)
-        return render_template("login.html", errors=errors)
+        return render_template("login.html", errors=errors, username = visibleUser)
 
     userID, hashPassword = result
 
@@ -156,4 +159,86 @@ def loginPage():
 
     else:
         errors.append("Неправильный логин или пароль")
-        return render_template("login.html", errors=errors)
+        return render_template("login.html", errors=errors, username = visibleUser)
+
+
+@lab5.route('/lab5/new_article', methods=['GET', 'POST'])
+def createArticle():
+    errors = []
+    visibleUser = "Anon"
+    visibleUser = session.get("username")
+
+    # проверян авторизован ли пользователь
+    # Мы читаем из JWT токена (session.get) ID пользовтеля
+    userID = session.get("id")
+
+    if userID is not None:
+        # пользовател авторизован, мы прочитали JWT токен
+        # проверили его валидность. Получили его id
+        if request.method=='GET':
+            return render_template('new_article.html', username = visibleUser)
+        
+        if request.method=='POST':
+            text_article = request.form.get("text_article")
+            title = request.form.get("title_article")
+
+            if len(text_article) == 0:
+                errors.append("Заполните текст")
+                return render_template('new_article.html', errors=errors, username = visibleUser)
+            
+            conn = dbConnect()
+            cur = conn.cursor()
+
+            cur.execute(f"INSERT INTO articles(user_id, title, articl_text) VALUES ('%s', '%s', '%s') RETURNING id", (userID, title, text_article))
+            # получаем id от вновь созданной записи.
+            # в нашем случае мы будем получать статьи след образом
+            # /lab5/article/id_article
+            new_article_id = cur.fetchone()[0]
+            conn.commit()
+
+            dbClose(cur,conn)
+
+            # делаем редирект на новую статью
+            # пока этот роут не сделан будет ошибка
+            # чтобы получить статью под №5, необходимо
+            # ввести в роут /lab5/articles/5
+            return redirect(f"/lab5/articles/{new_article_id}")
+        
+        # пользователь не авторизован, отправить на стр логина
+        return redirect ("/lab5/login")
+    
+
+
+# конструкция /<string:article_id> позволяет нам
+# получить это значение в роуте 
+# параметр к функции getArticle, как показано ниже
+
+# например, если /lab5/articles/123
+# то article_id = '123'
+@lab5.route("/lab5/articles/<int:article_id>")
+def getArticle(article_id):
+    userID = session.get("id")
+    visibleUser = "Anon"
+    visibleUser = session.get("username")
+
+    # проверяем авторизован ли пользователь
+    if userID is not None:
+        conn = dbConnect()
+        cur = conn.cursor()
+
+        cur.execute(f"SELECT title, articl_text FROM articles WHERE id = %s and user_id = %s", (article_id, userID))
+
+        # возьми одну строку
+        articleBody = cur.fetchone()
+
+        dbClose(cur, conn)
+       
+        if articleBody is None:
+            return "Not found!"
+        
+        # разбиваем строку на массив по "Enter", чтобы
+        # с помощью цикла for в jinja разбить статью на параграфы
+        text = articleBody[1].splitlines()
+
+        return render_template("articleN.html", article_text=text, visibleUser = visibleUser, 
+article_title=articleBody[0], username=session.get("username"))
