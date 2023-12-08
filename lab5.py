@@ -17,7 +17,6 @@ def dbClose(cursor, connection):
     connection.close()
 
 
-
 @lab5.route("/lab5")
 def main():
     visibleUser = "Anon"
@@ -51,7 +50,6 @@ def users():
     dbClose(cur, conn)
 
     return render_template("users.html", result=result)
-
 
 
 @lab5.route('/lab5/register', methods=["GET", "POST"])
@@ -111,7 +109,6 @@ def registerPage():
     dbClose(cur, conn)
     
     return redirect("/lab5/login")
-
 
 
 @lab5.route('/lab5/login', methods=["GET", "POST"])
@@ -207,7 +204,6 @@ def createArticle():
         # пользователь не авторизован, отправить на стр логина
         return redirect ("/lab5/login")
     
-
 
 # конструкция /<string:article_id> позволяет нам
 # получить это значение в роуте 
