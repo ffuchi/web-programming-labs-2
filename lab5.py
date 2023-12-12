@@ -19,9 +19,14 @@ def dbClose(cursor, connection):
 
 @lab5.route("/lab5")
 def main():
-    visibleUser = "Anon"
     visibleUser = session.get("username")
+    if visibleUser is not None:  
+        visibleUser = visibleUser
+    else:
+        visibleUser = 'Anon'
 
+    # visibleUser = "Anon"
+    # visibleUser = session.get("username")
 
     return render_template("lab5.html", username = visibleUser)
 
@@ -55,11 +60,12 @@ def users():
 @lab5.route('/lab5/register', methods=["GET", "POST"])
 def registerPage():
     errors = []
+    numLab = '5'
     visibleUser = "Anon"
     visibleUser = session.get("username")
     # Если это метод GET, то верни шаблон и заверши выполнение 
     if request.method == "GET": 
-        return render_template("register.html", errors=errors, username = visibleUser)
+        return render_template("register.html", errors=errors, username=visibleUser, numLab=numLab)
 
     # Если мы попали сюда, значит это метод РОЅT,
     # так как GЕT мы уже обработали и сделали return.
@@ -73,7 +79,7 @@ def registerPage():
     if not (username or password): 
         errors.append("Пожалуйста, заполните все поля") 
         print(errors) 
-        return render_template("register.html", errors=errors, username = visibleUser)
+        return render_template("register.html", errors=errors, username=visibleUser, numLab=numLab)
     
     # получаем пароль от пользователя, хэшируем его
     hashPassword = generate_password_hash(password)
@@ -87,7 +93,7 @@ def registerPage():
 
     # WARNING: мы используем f-строки, что не рекомендуется делать 
     # позже мы разберемся с Вами почему не стоит так делать
-    cur.execute(f"SELECT username FROM users WHERE username = %s;", (username))
+    cur.execute(f"SELECT username FROM users WHERE username = %s;", (username,))
 
     # fetchone, a отличие, от fetchall, получает только одну строку 
     # мы задали свойство UNIQUE для пользователя, значит
@@ -96,7 +102,7 @@ def registerPage():
     if cur.fetchone() is not None:
         errors.append("Пользователь с данным именем уже существует")
         dbClose(cur, conn) 
-        return render_template("register.html", errors=errors, username = visibleUser)
+        return render_template("register.html", errors=errors, username=visibleUser, numLab=numLab)
 
     # Если мы попали сюда, то значит в cur.fetchone нет ни одной строки
     # значит пользователя с таким же логином не существует
@@ -114,18 +120,17 @@ def registerPage():
 @lab5.route('/lab5/login', methods=["GET", "POST"])
 def loginPage():
     errors = []
-    visibleUser = "Anon"
-    visibleUser = session.get("username")
+    numLab = '5'
 
     if request.method == "GET":
-        return render_template("login.html", errors=errors, username = visibleUser)
+        return render_template("login.html", errors=errors, numLab=numLab)
 
     username = request.form.get("username")
     password = request.form.get("password")
 
     if not (username or password):
         errors.append("Пожалуйста заполните все поля")
-        return render_template("login.html", errors=errors, username = visibleUser)
+        return render_template("login.html", errors=errors, numLab=numLab)
 
     conn = dbConnect()
     cur = conn.cursor()
@@ -137,7 +142,7 @@ def loginPage():
     if result is None:
         errors.append("Неправильный логин или пароль")
         dbClose(cur, conn)
-        return render_template("login.html", errors=errors, username = visibleUser)
+        return render_template("login.html", errors=errors, numLab=numLab)
 
     userID, hashPassword = result
 
@@ -156,12 +161,13 @@ def loginPage():
 
     else:
         errors.append("Неправильный логин или пароль")
-        return render_template("login.html", errors=errors, username = visibleUser)
+        return render_template("login.html", errors=errors, numLab=numLab)
 
 
 @lab5.route('/lab5/new_article', methods=['GET', 'POST'])
 def createArticle():
     errors = []
+    numLab = '5'
     visibleUser = "Anon"
     visibleUser = session.get("username")
 
@@ -173,7 +179,7 @@ def createArticle():
         # пользовател авторизован, мы прочитали JWT токен
         # проверили его валидность. Получили его id
         if request.method=='GET':
-            return render_template('new_article.html', username = visibleUser)
+            return render_template('new_article.html', username = visibleUser, numLab=numLab)
         
         if request.method=='POST':
             text_article = request.form.get("text_article")
@@ -181,7 +187,7 @@ def createArticle():
 
             if len(text_article) == 0:
                 errors.append("Заполните текст")
-                return render_template('new_article.html', errors=errors, username = visibleUser)
+                return render_template('new_article.html', errors=errors, username = visibleUser, numLab=numLab)
             
             conn = dbConnect()
             cur = conn.cursor()
@@ -213,6 +219,7 @@ def createArticle():
 # то article_id = '123'
 @lab5.route("/lab5/articles/<int:article_id>")
 def getArticle(article_id):
+    numLab = '5'
     userID = session.get("id")
     username = "Anon"
 
@@ -235,12 +242,13 @@ def getArticle(article_id):
         # с помощью цикла for в jinja разбить статью на параграфы
         text = articleBody[1].splitlines()
 
-        return render_template("articleN.html", article_text=text, 
+        return render_template("articleN.html", article_text=text, numLab=numLab, 
 article_title=articleBody[0], username=session.get("username"))
 
 
 @lab5.route("/lab5/view_article")
 def view_article():
+    numLab = '5'
     userID = session.get("id")
     username = "Anon"
     
@@ -261,7 +269,8 @@ def view_article():
 
         dbClose(cur, conn)
 
-        return render_template("view_article.html", articles=articles, username=session.get("username"))
+        return render_template("view_article.html", articles=articles, 
+                                username=session.get("username"), numLab=numLab)
 
     # Пользователь не авторизован
     return redirect("/lab5/login")

@@ -8,26 +8,27 @@ def lab():
 
 @lab4.route('/lab4/login', methods = ['GET', 'POST'])
 def login():
+    numLab = '4'
     if request.method == 'GET':
-        return render_template('login.html')
+        return render_template('login.html', numLab=numLab)
 
     username = request.form.get('username')
     password = request.form.get('password')
     if username == 'alex' and password == '123':
-        return render_template('success.html', username=username)
+        return render_template('success.html', username=username, numLab=numLab)
 
     if not username and not password:
         error = 'Введите логин и пароль'
-        return render_template('login.html', error=error, username=username, password=password)
+        return render_template('login.html', error=error, username=username, password=password, numLab=numLab)
     elif not username:
         error = 'Не введен логин'
-        return render_template('login.html', error=error, username=username, password=password)
+        return render_template('login.html', error=error, username=username, password=password, numLab=numLab)
     elif not password:
         error = 'Не введен пароль'
-        return render_template('login.html', error=error, username=username, password=password)
+        return render_template('login.html', error=error, username=username, password=password, numLab=numLab)
     else:
         error = "Неверные логин и/или пароль"
-        return render_template("login.html", error=error, username=username, password=password)
+        return render_template("login.html", error=error, username=username, password=password, numLab=numLab)
     
 @lab4.route("/lab4/fridge", methods = ['GET', 'POST'])
 def fridge():
