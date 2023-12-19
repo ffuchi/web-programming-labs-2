@@ -32,11 +32,15 @@ function fillCourselist() {
             let tdActions = document.createElement('td');
             tdActions.append(editButton);
             tdActions.append(delButton);
+
+            let tdCreatedDate = document.createElement('td');
+            tdCreatedDate.innerText = courses[i].created_date;
             
             tr.append(tdName);
             tr.append(tdVideos);
             tr.append(tdPrice);
             tr.append(tdActions);
+            tr.append(tdCreatedDate);
 
             tbody.append(tr);
         }
@@ -83,7 +87,7 @@ function sendCourse() {
         videos: document.getElementById('videos').value,
         price: document.getElementById('price').value,
     };
-
+    
     const url = `/lab8/api/courses/${num}`;
     const method = num ? 'PUT' : 'POST';
     fetch(url, {
@@ -92,8 +96,8 @@ function sendCourse() {
         body: JSON.stringify(course),
     })
     .then(function() {
-        fillCourseList(); // перезагрузка таблицы
-        hideModal(); // закрытие модального окна
+        fillCourseList(); 
+        hideModal(); 
     });
 }
 
