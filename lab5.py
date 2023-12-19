@@ -207,8 +207,8 @@ def createArticle():
             # ввести в роут /lab5/articles/5
             return redirect(f"/lab5/articles/{new_article_id}")
         
-        # пользователь не авторизован, отправить на стр логина
-        return redirect ("/lab5/login")
+    # пользователь не авторизован, отправить на стр логина
+    return redirect ("/lab5/login")
     
 
 # конструкция /<string:article_id> позволяет нам

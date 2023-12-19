@@ -60,7 +60,7 @@ def register():
     # хэшируем пароль
     hashedPswd=generate_password_hash(password_form, method='pbkdf2')
     # создаем объект users с нужными полями
-    newUser=users(username=username_form, password=hashedPswd, numLab=numLab)
+    newUser=users(username=username_form, password=hashedPswd)
 
     # это INSERT
     db.session.add(newUser)
@@ -68,6 +68,9 @@ def register():
     db.session.commit()
 
     return redirect('/lab6/login')
+
+
+
 
 
 @lab6.route("/lab6/login", methods=["GET", "POST"])
@@ -104,6 +107,7 @@ def login():
 
 
 
+
 # login_required - авторизация обязательна,
 # если пользователь не авторизован, то перенаправить
 # на страницу lab6/login (lab6/login мы указывали в app.py)
@@ -115,14 +119,19 @@ def login():
 def view_article():
     numLab = '6'
     # select * from articles where user_id = current_user.id
-    my_articles = articles.query.filter_by(user_id=current_user.id).all()
+    my_articles = articles.query.filter_by(user_id=current_user.id)
+    my_articles = my_articles.order_by(articles.is_favorite.desc()).all()
     return render_template('view_article.html', articles=my_articles, numLab=numLab)
 
 
-@lab6.route("/lab6/articles/<int:article_id>")
+
+
+
+@lab6.route("/lab6/articles/<int:article_id>", methods=["GET", "POST"])
 @login_required
 def getArticle(article_id):
     numLab = '6'
+
     # select * from articles where user_id = current_user.id
     my_articles = articles.query.filter_by(id=article_id).first()
     
@@ -131,7 +140,47 @@ def getArticle(article_id):
 
     text = my_articles.article_text.splitlines()
 
-    return render_template('articleN.html', article_text=text, article_title=my_articles.title, numLab=numLab)
+    return render_template('articleN.html', article_text=text, article_title=my_articles.title, 
+                            numLab=numLab, is_favorite=my_articles.is_favorite, article_id=my_articles.id)
+
+
+@lab6.route('/lab6/articles/<int:article_id>/publish', methods=['POST'])
+def publish_article(article_id):
+    my_articles = articles.query.filter_by(id=article_id).first()
+    if request.form.get("is_public") == 'True':
+            is_public_form = True
+            my_articles.is_public = is_public_form
+            db.session.commit()
+    return redirect(f"/lab6/articles/{article_id}")
+
+
+@lab6.route('/lab6/articles/<int:article_id>/favorite', methods=['POST'])
+def favorite_article(article_id):
+    my_articles = articles.query.filter_by(id=article_id).first()
+    if request.form.get("is_favorite") == 'True':
+            is_favorite_form = True
+            my_articles.is_favorite = is_favorite_form
+            db.session.commit()
+    elif request.form.get("is_favorite") == 'False':
+        is_favorite_form = False
+        my_articles.is_favorite = is_favorite_form
+        db.session.commit()
+    return redirect(f"/lab6/articles/{article_id}")
+
+
+@lab6.route('/lab6/articles/<int:article_id>/likes', methods=['POST'])
+def like_article(article_id):
+    my_articles = articles.query.filter_by(id=article_id).first()
+
+    if not my_articles:
+        return "Not found!"
+
+    if my_articles.likes is None:
+        my_articles.likes = 0
+    my_articles.likes += 1
+    return redirect(f"/lab6")
+
+
 
 
 @lab6.route("/lab6/new_article", methods=['GET','POST'])
@@ -150,8 +199,8 @@ def createArticle():
             errors = 'Заполните текст'
             return render_template("new_article.html", errors=errors, numLab=numLab)
 
-
-    new_article = articles(user_id=current_user.id, title=title, article_text=text_article)
+    new_article = articles(user_id=current_user.id, title=title, article_text=text_article, 
+                            is_public=False)
     
     db.session.add(new_article)
     db.session.commit()
@@ -159,11 +208,6 @@ def createArticle():
     return redirect(f"/lab6/articles/{new_article.id}")
 
 
-@lab6.route("/lab6/logout")
-@login_required
-def logout():
-    logout_user()
-    return redirect('/lab6')
 
 
 
@@ -173,5 +217,27 @@ def main6lab():
         visibleUser = current_user.username
     else:
         visibleUser = 'Anon'
-    
-    return render_template("lab6.html", username = visibleUser)
+    # public_articles = db.session.query(articles.title, 
+    #                 articles.article_text, 
+    #                 users.username
+    #                 ).join(users, articles.user_id == users.id
+    #                 ).filter(articles.is_public == True)
+    public_articles = db.session.query(
+                        articles.title,
+                        articles.article_text,
+                        articles.Likes,
+                        users.username,
+                        ).join(users, articles.user_id == users.id,
+                        ).filter(articles.is_public == True, articles.user_id == current_user.id
+                        ).order_by(articles.is_favorite.desc())
+
+    return render_template("lab6.html", username = visibleUser, public_articles=public_articles)
+
+
+
+@lab6.route("/lab6/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect('/lab6')
+
