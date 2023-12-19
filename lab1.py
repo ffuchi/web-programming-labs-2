@@ -25,11 +25,11 @@ def menu():
         <main> 
             <h1>Лабораторные работы по WEB-программированию</h1>
             <ol>
-                <li><a href="http://127.0.0.1:5000/lab1" target="_blank">Лабораторная работа 1</a></li>
-                <li><a href="http://127.0.0.1:5000/lab2/" target="_blank">Лабораторная работа 2</a></li>
-                <li><a href="http://127.0.0.1:5000/lab3/" target="_blank">Лабораторная работа 3</a></li>
-                <li><a href="http://127.0.0.1:5000/lab4/" target="_blank">Лабораторная работа 4</a></li>
-                <li><a href="http://127.0.0.1:5000/lab5" target="_blank">Лабораторная работа 5</a></li>
+                <li><a href="/lab1" target="_blank">Лабораторная работа 1</a></li>
+                <li><a href="/lab2/" target="_blank">Лабораторная работа 2</a></li>
+                <li><a href="/lab3/" target="_blank">Лабораторная работа 3</a></li>
+                <li><a href="/lab4/" target="_blank">Лабораторная работа 4</a></li>
+                <li><a href="/lab5" target="_blank">Лабораторная работа 5</a></li>
             </ol>
         </main>
     
