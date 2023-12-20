@@ -46,7 +46,7 @@ def put_course(course_num):
     course = request.get_json()
     if course_num < 0 or course_num > len(courses)-1:
         abort(404, "Course not found")
-    
+    course["created_date"] = courses[course_num]["created_date"] 
     courses[course_num] = course
     return courses[course_num]
 
@@ -55,6 +55,6 @@ def put_course(course_num):
 @lab8.route('/lab8/api/courses/', methods=['POST'])
 def add_course():
     course = request.get_json()
-    course['created_date'] = datetime.now()
+    course["created_date"] = datetime.now()
     courses.append(course)
     return {"num": len(courses)-1}
