@@ -1,4 +1,4 @@
-function fillCourselist() {
+function fillCourseList() {
     fetch('/lab8/api/courses/')
     .then(function (data) {
         return data.json();
