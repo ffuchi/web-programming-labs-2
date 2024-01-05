@@ -1,0 +1,31 @@
+{% extends "base5.html" %}
+
+{% block lab %} Лабораторная работа 9{% endblock %}
+
+{% block script %}{% endblock %}
+
+{% block main %}
+    <div style="text-align: center;">
+        <div class="postcard" style=" width: 60%; border: 1px solid black;
+        background-color: #fff7e7; margin-top: 15px; padding: 10px;">
+            <img width="60%" class="postcard_photo" src="/static/поздравление.webp">
+            {% if gender == 'male' %}
+                <div>Поздравляю с новым годом, {{ user_1 }}!</div>
+                <br>
+                <div>Пусть этот год принесет много радости.</div>
+                <div>Желаю быть счастливым, пусть каждый день будет наполнен радостью!</div>
+                <br>
+                <div>С любовью, {{ user_2 }} </div>
+            {% endif %}
+
+            {% if gender == 'female' %}
+                <div>Поздравляю с новым годом, {{ user_1 }}!</div>
+                <br>
+                <div>Пусть этот год принесет много радости.</div>
+                <div>Желаю быть счастливой, пусть каждый день будет наполнен радостью!</div>
+                <br>
+                <div>С любовью, {{ user_2 }} </div>
+            {% endif %}
+        </div>
+    </div>
+{%endblock%}
